@@ -2,6 +2,7 @@ def generar_ClaseCsharp(plantillaPseudocodigo):
     archivo = open("codigoCsharp.cs", "w")
     cadena = plantillaPseudocodigo[0].split(" ")
     llave = cadena[0]
+    archivo.writelines("Using System;\n\n")
     for element in Diccionario:
         if element.get(llave) != None:
             archivo.writelines(element[llave] + " " + cadena[1])

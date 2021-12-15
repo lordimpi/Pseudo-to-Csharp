@@ -58,6 +58,8 @@ break break
 InicioAlgoritmo namespace
 FinAlgoritmo }
 escribir Console.WriteLine(
+Terminar break
+terminar break
 Con ;
 con ;
 Paso +=

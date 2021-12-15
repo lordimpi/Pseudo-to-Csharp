@@ -1,3 +1,5 @@
+Using System;
+
 namespace CsharpKing{
 	class program
 	{
