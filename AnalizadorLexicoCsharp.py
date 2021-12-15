@@ -1,3 +1,11 @@
+'''
+/**
+* +--------------------------------------------------------------------------------------+
+* | ESTUDIANTE: Santiago Acuña Obando – cocox-26@unicauca.edu.co |
+    ESTUDIANTE: Daniel Zambrano – danielzambrano@unicauca.edu.co | 
+* | FECHA: 2021/12/15 |
+* +--------------------------------------------------------------------------------------+
+'''
 def generar_ClaseCsharp(plantillaPseudocodigo):
     archivo = open("codigoCsharp.cs", "w")
     cadena = plantillaPseudocodigo[0].split(" ")
@@ -5,23 +13,23 @@ def generar_ClaseCsharp(plantillaPseudocodigo):
     archivo.writelines("Using System;\n\n")
     for element in Diccionario:
         if element.get(llave) != None:
-            archivo.writelines(element[llave] + " " + cadena[1])
-            archivo.writelines("{\n")
             archivo.writelines("\tclass program\n")
             archivo.writelines("\t{\n")
-            archivo.writelines("\t\tstatic void Main(string[] args)\n")
+            if funciones:
+                archivo.writelines(escribir_Codigo(PseudoCodigoFunciones, 0))
+            archivo.writelines("\t\tvoid Main(string[] args)\n")
             archivo.writelines("\t\t{\n")
             if len(plantillaPseudocodigo) > 2:
-                archivo.writelines(escribir_Codigo(plantillaPseudocodigo))
+                archivo.writelines(escribir_Codigo(plantillaPseudocodigo, 1))
             archivo.writelines("\t\t}\n")
             archivo.writelines("\t}\n")
-            archivo.writelines("}")
             archivo.close()
             return
 
-def escribir_Codigo(pseudo):
+
+def escribir_Codigo(pseudo, func):
     listaCodigo = []
-    for index in range(1, len(pseudo)-1, 1):
+    for index in range(func, len(pseudo)-1, 1):
         EsPara = False
         cadenas = pseudo[index].split(" ")
         indexCadena = 0
@@ -52,14 +60,23 @@ def escribir_Codigo(pseudo):
                 cad = cad.lower()
                 escribir = str(cadenas).lower()
                 if escribir.find("escribir") != -1:
-                    listaCodigo.append(")")
-                    if (cad.find("sino") == -1):
-                        if (cad.find("hacer") == -1):
-                            if (cad.find("fin") == -1):
-                                if (cad.find("entonces") == -1):
-                                    listaCodigo.append(";" + "\n")
+                    listaCodigo.append(");")
+                if escribir.find("break") != -1:
+                    listaCodigo.append(";");
+                else:
+                    if (cad.find("") == -1):
+                        if (cad.find("{") == -1):
+                            if (cad.find("}") == -1):
+                                if (cad.find(":") == -1):
+                                    if (cad.find(";") == -1):
+                                        if (cad.find("sino") == -1):
+                                            if (cad.find("hacer") == -1):
+                                                if (cad.find("fin") == -1):
+                                                    if (cad.find("entonces") == -1):
+                                                        listaCodigo.append(";" + "\n")
                 listaCodigo.append("\n")
     return listaCodigo
+
 
 def paraRecur(linea, posicionlinea, CadenaPara, cad):
     if posicionlinea < len(linea):
@@ -79,6 +96,7 @@ def paraRecur(linea, posicionlinea, CadenaPara, cad):
             posicionlinea = posicionlinea + 1
             paraRecur(linea, posicionlinea, CadenaPara, cad)
 
+
 def crear_para(indice, linea, posicionlinea):
     CadenaPara = indice + " = 0; " + indice + " "
     posicionlinea = posicionlinea + 1
@@ -86,31 +104,48 @@ def crear_para(indice, linea, posicionlinea):
     paraRecur(linea, posicionlinea, CadenaPara, cad)
     return cad[0]
 
+
 def BusquedaClave(ClaveBuscar):
     for element in Diccionario:
         if element.get(ClaveBuscar) != None:
             return element[ClaveBuscar]
     return None
 
+
 def crear_diccionario(plantillaTablaLexica):
     for i in range(len(plantillaTablaLexica)):
         linea = plantillaTablaLexica[i].split(" ")
         Diccionario.append({linea[0]: linea[1].replace("\n", "")})
 
+
+'================================================================================================='
 Diccionario = []
 PseudoCodigo = []
+PseudoCodigoFunciones = []
+funciones = False
+x = True
 with open("pseudocodigo.txt", "r") as fPsd:
     contentPsd = fPsd.readlines()
     fPsd.close()
     for element in contentPsd:
-        PseudoCodigo.append(element.replace("\n", ""))
+        cad = element.replace("\n", "")
+        cad = cad.replace("\t", "")
+        cad = cad.replace("\'", "\"")
+        cad = cad.replace("(", " (")
+        if cad.find("principal") == -1 and x:
+            PseudoCodigoFunciones.append(cad)
+        else:
+            x = False
+            PseudoCodigo.append(cad)
+    if PseudoCodigoFunciones != None:
+        funciones = True
 
 with open("tablaLexica.txt", "r") as fTbl:
     contentTbl = fTbl.readlines()
 
-if contentPsd[0].find("InicioAlgoritmo") != -1 and contentPsd[len(contentPsd) - 1].find("FinAlgoritmo") != -1:
+try:
     crear_diccionario(contentTbl)
     generar_ClaseCsharp(PseudoCodigo)
     print("CODIGO C# GENERADO CON EXITO...")
-else:
+except:
     print("No se puede generar codigo c#")
