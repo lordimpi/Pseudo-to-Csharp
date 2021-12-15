@@ -1,7 +1,3 @@
-InicioAlgoritmo Monda
-entero i 
-i <- 0
-Para entero i <- 0 Hasta 10 Incremento 1 Hacer
-Escribir i
-Fin
+InicioAlgoritmo CsharpKing
+escribir "HolaMundoNeas"
 FinAlgoritmo

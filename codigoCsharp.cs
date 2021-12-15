@@ -1,16 +1,10 @@
-namespace Monda{
+namespace CsharpKing{
 	class program
 	{
 		static void Main(string[] args)
 		{
-			int i  ;
+			Console.WriteLine( "HolaMundoNeas");
 
-			 i = 0;
-
-			for(int i = 0 ; 10 ; 1 ){
-			Console.WriteLine() i;
-
-			}
 		}
 	}
 }
